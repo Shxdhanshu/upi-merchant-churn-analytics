@@ -7,7 +7,7 @@ are quietly leaving, why, and what is it worth?*
 The interesting part is not the model. It is that the standard way of measuring
 churn is wrong in a specific, measurable way, and this repo measures it.
 
-**[▶ Live demo](https://REPLACE-WITH-YOUR-STREAMLIT-URL.streamlit.app)** — interactive
+> **[📊 Live demo](https://upi-merchant-churn-analytics-n9cukg5fxx5xxtb8pxuink.streamlit.app/)** — interactive
 walkthrough of the findings below. It reads the committed analysis outputs in
 `reports/`; it does not regenerate data or refit models.
 
