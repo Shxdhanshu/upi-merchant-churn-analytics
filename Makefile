@@ -1,4 +1,4 @@
-.PHONY: all install data warehouse analysis test clean
+.PHONY: all install data warehouse analysis dashboard test clean
 
 all: data warehouse analysis
 
@@ -17,6 +17,9 @@ analysis:        ## metric evaluation, drivers, segmentation, forecast
 	cd src && python segmentation.py
 	cd src && python forecast.py
 	cd src && python export_for_bi.py
+
+dashboard:       ## serve the Streamlit demo (reads reports/, no pipeline run needed)
+	streamlit run app.py
 
 test:
 	pytest -q tests

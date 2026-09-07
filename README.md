@@ -7,12 +7,17 @@ are quietly leaving, why, and what is it worth?*
 The interesting part is not the model. It is that the standard way of measuring
 churn is wrong in a specific, measurable way, and this repo measures it.
 
+**[▶ Live demo](https://REPLACE-WITH-YOUR-STREAMLIT-URL.streamlit.app)** — interactive
+walkthrough of the findings below. It reads the committed analysis outputs in
+`reports/`; it does not regenerate data or refit models.
+
 ```bash
 pip install -r requirements.txt
 make data        # ~30s, generates 7.4M transactions
 make warehouse   # runs sql/*.sql in order into DuckDB
 make analysis    # metric evaluation, drivers, segmentation, forecast
 make test
+make dashboard   # Streamlit demo — works without the three steps above
 ```
 
 ---
@@ -83,7 +88,45 @@ src/forecast.py                TPV forecast with a structural break
 tests/test_pipeline.py         guardrails against silent wrongness
 reports/memo.md                the one-page version for a stakeholder
 dashboard/README.md            BI layer specification
+app.py                         Streamlit demo over the committed reports/ outputs
 ```
+
+---
+
+## The dashboard
+
+`app.py` is a presentation layer and nothing else. It reads the CSV and JSON
+artefacts already committed under `reports/` — the same ones a BI tool would
+consume — and renders four tabs: **Overview**, **Churn & cohorts**, **Merchant
+segmentation**, **ML & forecast**. It fits no model, runs no SQL and never
+touches the DuckDB warehouse, so it starts instantly and stays consistent with
+the numbers in this README by construction rather than by coincidence.
+
+That split is the point: dashboards should consume modelled tables, not raw
+transactions. A BI tool doing its own joins over 7.4M rows is how you end up
+with four dashboards that each report a different number for the same metric.
+`dashboard/README.md` remains the full BI-layer spec; the Streamlit app
+implements the subset of it that the committed artefacts can support.
+
+```bash
+pip install -r requirements.txt
+streamlit run app.py          # or: make dashboard
+```
+
+Runs from a clean clone with no pipeline execution. Run `make data warehouse
+analysis` first only if you want to regenerate the underlying artefacts.
+
+### Deploying to Streamlit Community Cloud
+
+1. Push the repo to GitHub with `reports/` committed (it already is).
+2. At [share.streamlit.io](https://share.streamlit.io), **Create app** → pick
+   this repository, branch `main`, main file path `app.py`.
+3. Deploy. Dependencies come from `requirements.txt`; the theme comes from
+   `.streamlit/config.toml`. No secrets and no environment variables are needed.
+4. Paste the resulting URL into the **Live demo** link at the top of this file.
+
+`data/raw/` and `data/warehouse.duckdb` stay gitignored — the deployed app does
+not need them.
 
 ---
 

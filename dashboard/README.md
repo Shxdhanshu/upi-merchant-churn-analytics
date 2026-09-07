@@ -1,5 +1,10 @@
 # Dashboard specification
 
+> `app.py` at the repo root implements the subset of this spec that the
+> committed `reports/` artefacts can support, as a deployable Streamlit demo.
+> This file remains the full specification for a Power BI / Tableau build
+> against the warehouse.
+
 The warehouse is the source of truth; this is the spec for the BI layer on top
 of it. Build against `data/warehouse.duckdb` (Power BI and Tableau both read
 DuckDB via ODBC), or point at Postgres after `src/load_to_postgres.py`.
